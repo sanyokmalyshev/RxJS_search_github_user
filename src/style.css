@@ -1,0 +1,47 @@
+.container {
+    width : 800px;
+    margin: 0 auto;
+}
+
+.mybtn {
+    margin: 0 20px 0 10px;
+}
+
+article {
+    display: flex;
+}
+
+.img {
+    width : 250px;
+    height: 250px;
+}
+
+img {
+    width: 100%;
+}
+.user_info {
+    margin-left: 20px;
+}
+.user_info  .location {
+    margin-bottom: 0;
+}
+.user_info .twiter_link {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+.user_info ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.myspinner {
+    display: none;
+}
+.footer {
+    background-color: #4b4e52;
+    color: white;
+    padding: 5px 0;
+    margin: 10px 0;
+    border-radius: 10px;
+}
