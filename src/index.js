@@ -1,34 +1,39 @@
 import './style.css';
-import { fromEvent, of, Observable, from } from 'rxjs';
+import { fromEvent } from 'rxjs';
 import { fromFetch } from 'rxjs/fetch';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { map, switchMap, debounceTime } from 'rxjs/operators';
 
 const userName = document.getElementById('user');
-const btn = document.getElementById('btn');
+const content = document.querySelector('.content');
 const p = document.querySelector('.output');
-const form = document.querySelector('form');
 const info = document.querySelector('.info');
 const spinner = document.querySelector('.myspinner');
 const footer = document.querySelector('footer');
 
 const url = 'https://api.github.com/users/';
 
-const search$ = fromEvent(btn, 'click');
+const search$ = fromEvent(userName, 'input');
 
 search$
     .pipe(
         map(ev => {
             loading();
             ev.preventDefault();
-            return userName.value;
-        })
+            return ev.target.value;
+        }),
+        debounceTime(500)
     )
     .subscribe(value => {
-        getUser(value);
+        if(value == "") {
+            content.style.display = 'none';
+            spinner.style.display = "none";
+        } else {
+            getUser(value);
+        }
+        
     })
 
 const getUser = (value) => {
-    setTimeout(() => {
         fromFetch(`https://api.github.com/users/${value}`)
         .pipe(
             switchMap(response => {
@@ -39,8 +44,9 @@ const getUser = (value) => {
         )
         .subscribe({
             next: value => {
-                info.innerHTML = "";
+                content.style.display = 'block';
                 spinner.style.display = 'none';
+                info.innerHTML = "";
                 p.style.color = 'green';
                 p.innerHTML = 'Пользователь найден';
                 userInfo(value);
@@ -48,15 +54,15 @@ const getUser = (value) => {
                 footer.innerHTML = '<div class="col copy">@Created by Alexandr Malyshev</div>';
             },
             error: err => {
+                content.style.display = 'block';
+                info.innerHTML = "";
                 spinner.style.display = 'none';
                 p.style.color = 'red';
                 p.innerHTML = 'Пользователь не найден. ' + err.message;
-                info.innerHTML = "";
                 footer.innerHTML = "";
                 footer.classList.remove('footer');
             }
         })
-    }, 1000)
 }
 
 const userInfo = (value) => {

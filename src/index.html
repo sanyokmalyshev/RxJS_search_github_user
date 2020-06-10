@@ -17,7 +17,9 @@
             реализуйте ее обработку и отображение пользователю в теле документа. В случае успеха -
             страница должна отображать данные о пользователе: имя, почта, компания, адрес, количество
             репозиториев и, в случае если есть фото – также показывать фото user’a. Реализуйте задержку
-            при запросе и также анимацию загрузки на странице во время поиска.</p>
+            при запросе и также анимацию загрузки на странице во время поиска.Поиск должен производиться по
+            вводу пользователем запроса в текстовом поле. Используйте оператор задержки отправки
+            запроса на сервер при вводе текста.</p>
         <form action="#">
 
             <div class="input-group mb-3">
@@ -31,9 +33,9 @@
                         </svg>
                     </span>
                 </div>
-                <input type="text" class="form-control col-8" placeholder="Введите имя пользователя:"
+                <input type="text" class="form-control col-10" placeholder="Введите имя пользователя:"
                     aria-label="Введите имя пользователя:" aria-describedby="basic-addon1" name="user" id="user">
-                <input type="submit" id='btn' value="Отправить" class="btn btn-dark mybtn">
+
                 <div class="spinner-border myspinner" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
@@ -41,14 +43,15 @@
 
 
         </form>
-        <p class='output'></p>
-        <div class="info">
-        </div>
-        <footer>
+        <div class="content">
+            <p class='output'></p>
+            <div class="info">
+            </div>
+            <footer>
 
-        </footer>
+            </footer>
+        </div>
     </div>
-    <script src="../dist/bundle.js"></script>
 </body>
 
 </html>

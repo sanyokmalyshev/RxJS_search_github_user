@@ -37,6 +37,7 @@ img {
 
 .myspinner {
     display: none;
+    margin-left: 15px;
 }
 .footer {
     background-color: #4b4e52;
