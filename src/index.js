@@ -1,12 +1,11 @@
 import './style.css';
-import { fromEvent, of, Observable, from } from 'rxjs';
+import { fromEvent } from 'rxjs';
 import { fromFetch } from 'rxjs/fetch';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 const userName = document.getElementById('user');
 const btn = document.getElementById('btn');
 const p = document.querySelector('.output');
-const form = document.querySelector('form');
 const info = document.querySelector('.info');
 const spinner = document.querySelector('.myspinner');
 const footer = document.querySelector('footer');
