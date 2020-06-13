@@ -1,5 +1,5 @@
 import './style.css';
-import { fromEvent } from 'rxjs';
+import { fromEvent, Subject } from 'rxjs';
 import { fromFetch } from 'rxjs/fetch';
 import { map, switchMap } from 'rxjs/operators';
 
@@ -12,9 +12,9 @@ const footer = document.querySelector('footer');
 
 const url = 'https://api.github.com/users/';
 
-const search$ = fromEvent(btn, 'click');
+const subj$ = new Subject;
 
-search$
+const search$ = fromEvent(btn, 'click')
     .pipe(
         map(ev => {
             loading();
@@ -22,39 +22,42 @@ search$
             return userName.value;
         })
     )
-    .subscribe(value => {
-        getUser(value);
-    })
+
+search$.subscribe(subj$);
+
+subj$.subscribe(value => {
+    getUser(value);
+})
 
 const getUser = (value) => {
     setTimeout(() => {
         fromFetch(`https://api.github.com/users/${value}`)
-        .pipe(
-            switchMap(response => {
-                if (response.ok) {
-                    return response.json()
-                };
+            .pipe(
+                switchMap(response => {
+                    if (response.ok) {
+                        return response.json()
+                    };
+                })
+            )
+            .subscribe({
+                next: value => {
+                    info.innerHTML = "";
+                    spinner.style.display = 'none';
+                    p.style.color = 'green';
+                    p.innerHTML = 'Пользователь найден';
+                    userInfo(value);
+                    footer.classList.add('footer');
+                    footer.innerHTML = '<div class="col copy">@Created by Alexandr Malyshev</div>';
+                },
+                error: err => {
+                    spinner.style.display = 'none';
+                    p.style.color = 'red';
+                    p.innerHTML = 'Пользователь не найден. ' + err.message;
+                    info.innerHTML = "";
+                    footer.innerHTML = "";
+                    footer.classList.remove('footer');
+                }
             })
-        )
-        .subscribe({
-            next: value => {
-                info.innerHTML = "";
-                spinner.style.display = 'none';
-                p.style.color = 'green';
-                p.innerHTML = 'Пользователь найден';
-                userInfo(value);
-                footer.classList.add('footer');
-                footer.innerHTML = '<div class="col copy">@Created by Alexandr Malyshev</div>';
-            },
-            error: err => {
-                spinner.style.display = 'none';
-                p.style.color = 'red';
-                p.innerHTML = 'Пользователь не найден. ' + err.message;
-                info.innerHTML = "";
-                footer.innerHTML = "";
-                footer.classList.remove('footer');
-            }
-        })
     }, 1000)
 }
 
